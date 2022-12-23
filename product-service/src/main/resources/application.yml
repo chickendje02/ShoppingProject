@@ -1,0 +1,18 @@
+my:
+  username: intern
+  password: intern
+  url: jdbc:mysql://172.21.3.49:3306/internship
+
+spring:
+  application:
+    name: product-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${my.username}
+    password: ${my.password}
+    url: ${my.url}
+  jpa:
+    show-sql: true
+
+server:
+  port: 8000

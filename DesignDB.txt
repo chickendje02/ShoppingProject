@@ -1,0 +1,44 @@
+Product
+	Id
+	Name
+	Price
+	TypeID
+	vendorID
+	updated date
+	updated by
+	
+Images
+	id
+	name
+	type ENUM('MAIN','SUB')
+	product_id
+	
+
+Type
+	id
+	name
+	updated date
+	updated by
+	
+	
+Vendor
+	Id
+	Name
+	Country
+	updated date
+	updated by
+	
+admin
+	Id
+	Name
+	Role
+	
+Permission
+	Id
+	Name
+
+Logging-Search
+	Id
+	productId
+	times
+	last_updated_by
