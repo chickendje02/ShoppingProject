@@ -1,24 +1,17 @@
 package com.excercise.productservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 @Data
 @Entity(name = "product_sherwin")
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String productName;
@@ -27,11 +20,11 @@ public class Product {
 
     private Long typeId;
 
-    private Long vendorId;
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Image> images;
 
-    @OneToMany(mappedBy = "product")
-    private List<Image> images;
-
-    @OneToMany(mappedBy = "product")
-    private List<Vendor> vendors;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "vendor_id")
+    @JsonIgnore
+    private Vendor vendor;
 }

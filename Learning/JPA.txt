@@ -1,0 +1,8 @@
+JPA
+FetchType. Eager = Fetch all (To load it together with the rest of the fields)
+FetchType.Lazy = fetch when needed (To load it on demand. For example: when you use getter function ) 
+
+Cascade
+Cascade.PERSIST: When insert parent, children will be inserted too
+CascadeType.MERGE: 
+CascadeType.REMOVE: When parent is deleted, children will be deleted too

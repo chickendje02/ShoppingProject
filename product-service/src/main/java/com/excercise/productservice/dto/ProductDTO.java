@@ -1,13 +1,20 @@
 package com.excercise.productservice.dto;
 
-import com.excercise.productservice.model.Image;
-import com.excercise.productservice.model.Product;
+import lombok.Builder;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@Builder
 public class ProductDTO {
+    private long id;
 
+    private String productName;
+
+    private long typeId;
+
+    private List<ImageDTO> listImages;
+
+    private String vendorName;
 }

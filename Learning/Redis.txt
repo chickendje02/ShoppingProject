@@ -1,0 +1,33 @@
+‘Redis’, which stands for Remote Dictionary Server
+Redis is an open-source (BSD licensed), in-memory data structure store, used as a database, cache, and message broker. 
+
+An in-memory database is a database that keeps the whole dataset in RAM.
+
+Redis store data in memory ( RAM) . So each time you query, you only access the memory ( no disk involved)
+
+Redis is a key-value storage where we can easily store our data and may be this data is useable for application database, cashing, message broker and queue.And its aslo super fast to response because of for using in-memory data store macanism.
+
+Use Cases Of redis
+	+ Session Cache ( speeding up load page)
+	+ Full Page Cache ( 
+	+ Queues
+	+ Leaderboards/ Counting
+	+ Pub/Sub
+	+ Real time Analysis: 
+Why we use Redis:
+	+ Quick response database: it stores data in memory, rather than on a disk or solid-state drive (SSD) that's why its response time is quicker than others when performing read and write operations.
+	+ Data persistence: Redis can then be configured to generate these database backups on-demand or at automatic intervals to ensure database durability and integrity.
+	+ Support for arbitrary data: Data stored in Redis can be in any form and size.
+	+ Key-based access
+	+ Data expiration: Keys in Redis can be set with a time to live (TTL), after which they are expired. Until they expire, such keys are called “volatile” keys.
+
+Key should not contains whitespace
+
+Redis can create key and expired time, after expired time it will be deleted automatically
+
+There 16 database in redis
+We can change the database by using "SELECT {index}"
+Default database on redis is at index 0,
+"MOVE " command to move key from current database to another data base
+
+MONITOR is a debugging command that streams back every command processed by the Redis server.

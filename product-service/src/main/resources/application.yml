@@ -1,7 +1,10 @@
 my:
-  username: intern
-  password: intern
-  url: jdbc:mysql://172.21.3.49:3306/internship
+#  username: intern
+#  password: intern
+#  url: jdbc:mysql://172.21.3.49:3306/internship
+  username: user
+  password: trungnguyen
+  url: jdbc:mysql://localhost:3306/mydb
 
 spring:
   application:
