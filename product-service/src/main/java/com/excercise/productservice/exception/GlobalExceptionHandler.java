@@ -43,4 +43,15 @@ public class GlobalExceptionHandler {
                 "Tinh ngu 123");
         return message;
     }
+
+    @ExceptionHandler(CommonBusinessException.class)
+    public ErrorMessage commonBusinessExceptionHandler(Exception ex, WebRequest request){
+        ex.printStackTrace();
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                new Date(),
+                ex.getMessage(),
+                "Internal server error");
+        return message;
+    }
 }

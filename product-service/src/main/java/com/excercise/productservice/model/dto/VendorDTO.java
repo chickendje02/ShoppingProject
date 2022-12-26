@@ -1,4 +1,4 @@
-package com.excercise.productservice.dto;
+package com.excercise.productservice.model.dto;
 
 import lombok.Builder;
 import lombok.Data;

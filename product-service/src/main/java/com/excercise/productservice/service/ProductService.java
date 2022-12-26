@@ -1,14 +1,14 @@
 package com.excercise.productservice.service;
 
-import com.excercise.productservice.dto.ProductDTO;
-import com.excercise.productservice.model.Product;
-import com.excercise.productservice.model.ProductFilter;
+import com.excercise.productservice.model.dto.ProductDTO;
+import com.excercise.productservice.model.filter.ProductFilter;
+import com.excercise.productservice.model.update.ProductUpdate;
 
 import java.util.List;
 
 public interface ProductService {
 
-    public List<ProductDTO> findAll(ProductFilter filter);
+    List<ProductDTO> findAll(ProductFilter filter);
 
-    public void saveProduct(Product product);
+    void saveProduct(ProductUpdate product);
 }

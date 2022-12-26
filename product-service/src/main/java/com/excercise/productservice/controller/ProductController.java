@@ -1,8 +1,8 @@
 package com.excercise.productservice.controller;
 
-import com.excercise.productservice.dto.ProductDTO;
-import com.excercise.productservice.model.Product;
-import com.excercise.productservice.model.ProductFilter;
+import com.excercise.productservice.model.dto.ProductDTO;
+import com.excercise.productservice.model.update.ProductUpdate;
+import com.excercise.productservice.model.filter.ProductFilter;
 import com.excercise.productservice.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity saveProduct(@RequestBody Product product){
+    public ResponseEntity addProduct(@RequestBody ProductUpdate product){
+        productService.saveProduct(product);
+        return ResponseEntity.ok("Ok");
+    }
+
+    @PutMapping
+    public ResponseEntity updateProduct(@RequestBody ProductUpdate product){
         productService.saveProduct(product);
         return ResponseEntity.ok("Ok");
     }

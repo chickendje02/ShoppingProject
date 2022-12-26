@@ -1,4 +1,4 @@
-package com.excercise.productservice.model;
+package com.excercise.productservice.model.orm;
 
 import lombok.Data;
 

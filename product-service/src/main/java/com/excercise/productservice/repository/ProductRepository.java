@@ -1,6 +1,6 @@
 package com.excercise.productservice.repository;
 
-import com.excercise.productservice.model.Product;
+import com.excercise.productservice.model.orm.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
