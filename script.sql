@@ -1,4 +1,5 @@
 
+CREATE DATABASE mydb;
 DROP TABLE IF EXISTS product_sherwin;
 CREATE TABLE product_sherwin(
                                 id INT(11) PRIMARY KEY AUTO_INCREMENT,
