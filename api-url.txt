@@ -1,1 +1,52 @@
-localhost:8000/product/find-all?name=&vendorName=&price=512
+eureka-server (service-discovery)
+    localhost:8761
+product-service
+    GET - localhost:8000/product/find-all?name=&vendorName=&price=512
+    GET DETAIL WITH Path Variable {id}  - localhost:8000/product/get-product-detail/{id}
+    POST - localhost:8000/product
+        {
+            "productName": "TN1234",
+            "productPrice": 200.23,
+            "typeId": 1,
+            "vendorId": 1,
+            "imageUpdate": [
+                {
+                    "imageName": "Test Image",
+                    "typeImage": "SUB"
+                },
+                {
+                    "imageName": "Test MAIN Image",
+                    "typeImage": "MAIN"
+                },
+                {
+                    "imageName": "Test SUB Image",
+                    "typeImage": "SUB"
+                }
+            ]
+        }
+    PUT -  localhost:8000/product
+        {
+            "id": "1"
+            "productName": "TN1234",
+            "productPrice": 200.23,
+            "typeId": 1,
+            "vendorId": 1,
+            "imageUpdate": [
+                {
+                    "imageName": "Test Image",
+                    "typeImage": "SUB"
+                },
+                {
+                    "imageName": "Test MAIN Image",
+                    "typeImage": "MAIN"
+                },
+                {
+                    "imageName": "Test SUB Image",
+                    "typeImage": "SUB"
+                }
+            ]
+        }
+    DELETE with path variable - localhost:8000/product/delete-product/{id}
+
+api-gateway
+    localhost:8765/product-service/product/find-all?name=&vendorName=&price=512

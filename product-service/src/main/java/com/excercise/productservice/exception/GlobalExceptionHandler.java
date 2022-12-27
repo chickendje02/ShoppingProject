@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ErrorMessage globalExceptionHandler(Exception ex, WebRequest request){
+    public ErrorMessage globalExceptionHandler(Exception ex, WebRequest request) {
         ex.printStackTrace();
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ArithmeticException.class)
-    public ErrorMessage ArithmeticExceptionExceptionHandler(ArithmeticException ex, WebRequest request){
+    public ErrorMessage ArithmeticExceptionExceptionHandler(ArithmeticException ex, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 new Date(),
@@ -45,10 +45,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CommonBusinessException.class)
-    public ErrorMessage commonBusinessExceptionHandler(Exception ex, WebRequest request){
+    public ErrorMessage commonBusinessExceptionHandler(CommonBusinessException ex, WebRequest request) {
         ex.printStackTrace();
+        int code = ex.getCode() != 0 ? ex.getCode() : HttpStatus.INTERNAL_SERVER_ERROR.value();
         ErrorMessage message = new ErrorMessage(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                code,
                 new Date(),
                 ex.getMessage(),
                 "Internal server error");

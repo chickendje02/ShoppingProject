@@ -1,6 +1,7 @@
 package com.excercise.productservice.service.impl;
 
 import com.excercise.productservice.enumeration.TypeImage;
+import com.excercise.productservice.exception.CommonBusinessException;
 import com.excercise.productservice.model.dto.ImageDTO;
 import com.excercise.productservice.model.dto.ProductDTO;
 import com.excercise.productservice.model.filter.ProductFilter;
@@ -12,12 +13,14 @@ import com.excercise.productservice.repository.ImageRepository;
 import com.excercise.productservice.repository.ProductRepository;
 import com.excercise.productservice.service.ProductService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +46,30 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         return result;
+    }
+
+    @Override
+    public ProductDTO getProductDetail(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            return this.mappingToProduct(product.get());
+        }
+        throw new CommonBusinessException("Not found Product", HttpStatus.NOT_FOUND.value());
+    }
+
+    @Override
+    @Transactional
+    public void removeProduct(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            Set<Image> images = product.get().getImages();
+            if (!images.isEmpty()) {
+                imageRepository.deleteByProductId(id);
+            }
+            productRepository.deleteById(id);
+        } else {
+            throw new CommonBusinessException("Not found Product", HttpStatus.NOT_FOUND.value());
+        }
     }
 
     @Override

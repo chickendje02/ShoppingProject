@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<List<Product>> findAllByProductNameContainsAndProductPriceLessThanAndVendorVendorNameContains(String productName, BigDecimal productPrice, String vendorName);
+
+    Optional<Product> findById(Long id);
 }
