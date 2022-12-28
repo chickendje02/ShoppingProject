@@ -31,3 +31,4 @@ Default database on redis is at index 0,
 "MOVE " command to move key from current database to another data base
 
 MONITOR is a debugging command that streams back every command processed by the Redis server.
+
