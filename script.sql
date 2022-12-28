@@ -27,6 +27,13 @@ CREATE TABLE vendor_sherwin(
                                country VARCHAR(50)
 );
 
+DROP TABLE IF EXISTS customer_logging_sherwin;
+CREATE TABLE customer_logging_sherwin(
+                                         uuid VARCHAR(50) PRIMARY KEY,
+                                         action ENUM('SEARCH','FILTER','VIEW'),
+                                         content TEXT,
+                                         log_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW()
+);
 
 INSERT INTO `product_sherwin`
 (

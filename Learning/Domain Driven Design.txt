@@ -1,0 +1,18 @@
+Anemic Model là model chỉ có setter/getter không có function khác như validation, insert
+Những function đó sẽ được move ra 1 class riêng ( VD: UserService, UserDAO, ...)
+Càng ít logic trong class hoặc là không có logic bussiness
+
+Ubiquitous Language là gì? “Ubiquitous languange” được hiểu là thứ ngôn ngữ “phổ biến ở khắp ơi”. Theo đó, ai cũng dùng và hiểu được. Hơn nữa, với ngôn ngữ ubiquitous, mọi người đều có cách hiểu giống nhau với dùng một diễn đạt.
+
+
+Bounded Context là chia ra những phần khác nhau có nhiệm vụ riêng biệt và những phần đó sẽ giao tiếp nhau thông qua Ubiquitous Language
+Ví dụ như DBA department và dev department sẽ giao tiesp với nhau thông qua đưa param nào xuống DB để xử lý và dev sẽ lấy data từ DB lên service xử lý tiếp
+
+CQRS ( Command Query Responsibility Segregation) là pattern phân chia query và command ( update/delete/create data) riêng biệt từ controller đến model. Chúng ta  tách riêng ra 2 DB 1 cho write và 1 cho read
+
+
+ContextualValidation
+Ví dụ 
+Tạo ra 1 interface cho validation ( validate email, first name, password, tuổi, )
+Ví dụ như create thì sẽ call validate password,
+Update thì sẽ chỉ validate password nếu cần thiết

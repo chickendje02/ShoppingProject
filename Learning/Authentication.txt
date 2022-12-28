@@ -1,0 +1,20 @@
+Authentication is simply "Who are you"?
+To simplify things, the way users can verify their identity can be divided into two categories: password-based and passwordless options
+
+5 common authentication types
+Password based Authentication
+Multi-factor authentication ( like after login successfully, it will need OTP code )
+Certificate-based authentication
+Biometric authentication (Passwordless)
+	Fingerprint
+	Facial Recognition
+	Speaker Recognition
+	Email Authentication
+Token based Authentication ( , JWT)
+Scan QR Code - phone-as-a-token authentication
+
+
+SSO ( Single sign-on) authentication,
+It’s a process that lets you remain logged in to an account even when you move to a different domain or server. This system is ideal for organizations that have various products and services located on different websites.
+Google is a great example of how this system works. When a user logs into their Gmail account, they’ll have access to all of Google’s services—YouTube, Google Analytics, Google Drive, etc.—without needing to sign in again.
+When SSO authentication is used, users can drastically cut down the number of accounts they have to manage. With fewer passwords to remember, users can focus on creating (and remembering!) stronger credentials. 

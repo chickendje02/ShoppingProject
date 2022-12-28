@@ -1,0 +1,43 @@
+Docker will save our repository on hub.docker.com
+Our traditional deploy is to install java environment, tomcat server and software/hardware
+Docker will help you to create an image which contains everything needed to run ur application
+Like Java 8 or Java 11 or whatever version you want to, and it contains all library your API needed/dependency
+So when we run command "docker run ..." image will be downloaded to our machince and local image will be created
+so once it's done downloaded, it is ran as application in our machine
+When imaged downloaded and running, it will call a container
+
+We need to config an internal port for container port
+For example: container run on port 5000 we wil use command -p 8000:5000 to let container run on port 8000
+
+docker run -p 8001:5000 -d --restart=always in28min/todo-rest-api-h2:0.0.1-SNAPSHOT: command to run container whenever docker restart
+docker container run -p 8001:5000 -m 512m --cpu-quota 50000 -d: run container with allowed resouce such as memory 512mb, cpu usage 50%
+docker events: show all events of docker
+docker stats: show status of all container for example: cpu usages, memory usages,
+docker images: Show all images have been pulled from docker registry
+docker image history (id): get all the step involved in creating specific image such as config java environment, build jar file
+docker image remove (id): remove specific image in local machine
+docker containers ls : Show all container running currently on machine
+docker container ls -a : show history of container on local machince such as name,status,created,
+docker container stop (id): stop the specific container with id 
+docker container logs (id): show log of specific container with id
+docker container logs -f (id): keep showing log of specific container with id
+docker container kill (id): kill the container immediately without giving it time to stop other option unlike stop command
+docker container pause/unpause e870: pause/unpause specific container
+docker container prune: remove all containers
+docker-compose up: run docker-compose
+
+All the containers are managed by docker daemon or the docker engine
+Docker daemon also manage docker image
+
+Docker daemon is responsible for our local stuff and also pulling something from image repository (Docker Hub)
+
+Official Image is like library in java
+
+Single image can have multiple tag
+
+Docker compose is a  tool for defining and running multi-container docker application
+
+Localhost in docker isn't the same as localhost running on our machine
+
+Can create a docker-compose file to contain all the config
+

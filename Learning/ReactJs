@@ -1,0 +1,5 @@
+React components are modular and reusable.
+React components should be stateless and composable.
+It would help if you used react-router to manage your front-end routes.
+You can use Prerender to speed up the rendering of your React components.
+You can use Redux for state management.

@@ -1,0 +1,42 @@
+MultiThreading
+
+All java program has at leasts 1 thread which is main thread
+Java Thread Benefits
+	Java Threads are lightweight compared to processes, it takes less time and resource to create a thread.
+	Threads share their parent process data and code
+	Context switching between threads is usually less expensive than between processes.
+	Thread intercommunication is relatively easy than process communication.
+	
+Use Java callable future to get return value from Threads
+
+join() help thread to wait current thread finish to execute next command;
+For example:
+You have 2 thread t1,t2 and t1 executed first, join will help t2 to wait for seconds or till t1 ended to execute
+
+Life Cycle of Thread;
+New -> Runnable -> Running <-> Blocked/waiting -> Dead
+
+We need to use synchronized to block the object we're working on with notify and wait()
+Notify and wait help to work on the same object
+
+synchronization block the object and it allow 1 thread to access it only
+
+Java Timer class is thread safe and multiple threads can share a single Timer object without need for external synchronization. Timer class uses java.util.TaskQueue to add tasks at given regular interval and at any time there can be only one thread running the TimerTask, for example if you are creating a Timer to run every 10 seconds but single thread execution takes 20 seconds, then Timer object will keep adding tasks to the queue and as soon as one thread is finished, it will notify the queue and another thread will start executing. Java Timer class uses Object wait and notify methods to schedule the tasks
+
+Java BlockingQueue doesn’t accept null values and throw NullPointerException if you try to store null value in the queue
+
+Executors help to manage thread for example: allow how many threads run at same time or when to execute it
+
+Callable help to get value return from Thread
+
+FutureTask is base concrete implementation of Future interface and provides asynchronous processing. It contains the methods to start and cancel a task and also methods that can return the state of the FutureTask as whether it’s completed or cancelled. We need a callable object to create a future task and then we can use Java Thread Pool Executor to process these asynchronously.
+
+Different between CompletableFuture and Thread
+CompletableFuture.runAsync(...) runs the Runnable in the forkJoin-Pool which is managed, while new Thread() creates a new thread which you have to manage.
+What does "is managed" mean, it's pre-allocated and the threads are shared in the JVM. When the runnable is completed, the thread can be reused for other runnables. This makes better usage of resources, especially as thread instantiation is an expensive operation - not only the object, but also some extra non-heap memory - the thread stack - has to be allocated.
+
+There are two types of threads in an application - user thread and daemon thread. When we start an application, the main is the first user thread created. We can create multiple user threads as well as daemon threads. When all the user threads are executed, JVM terminates the program.
+
+The ForkJoinPool is the heart of the framework. It is an implementation of the ExecutorService that manages worker threads and provides us with tools to get information about the thread pool state and performance.
+
+The TheadLocal construct allows us to store data that will be accessible only by a specific thread.

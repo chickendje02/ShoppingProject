@@ -1,0 +1,26 @@
+Spring cloud config server
+Dùng https token được generate trên trang chủ để có thể access những private repository
+
+spring:
+  application:
+    name: ludus-config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://stash.pinnacle.com/scm/~sherwind/spring-config-server.git
+          username: sherwind
+          password: Nzc5MzgyNDQ3MTM2OnG78JtdOKetY5KMAMl8GwKwWLD1 // Token here
+          default-label: master
+          clone-on-start: true
+
+Spring cloud client sẽ load file properties trên config server dựa trên application name
+Ví dụ:
+Client có application name là test-abc thì sẽ load file test-abc.properties tren config server
+Có thể load config từ những file riêng biệt ví dụ như là test-abc-dev.properties
+thì trong phần config mình thêm spring.cloud.config.profile = dev và spring.profiles.active = dev
+
+Khi server connect tới git và git có application.properties thì sẽ được move xuống các client luôn
+
+
+https://spring.io/guides/gs/centralized-configuration/

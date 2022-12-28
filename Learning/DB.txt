@@ -1,0 +1,9 @@
+Mặc dù Index đóng vai trò quan trọng trong việc tối ưu truy vấn và tăng tốc độ tìm kiếm trong Database nhưng nhược điểm của nó là tốn thêm bộ nhớ để lưu trữ. Do vậy, việc Index cho các cột phải được tính toán cẩn thận
+Dưới đây là một số Tips giúp bạn tạo Database index hiệu quả hơn:
+
+Nên Index những cột được dùng trong WHERE, JOIN và ORDER BY
+Dùng chức năng index prefix" or "multi-columns index” của MySQL. Vd: Nếu bạn tạo Index(first_name, last_name) thì k cần tạo Index(first_name)
+Dùng thuộc tính NOT NULL cho những cột được Index
+Không dùng Index cho các bảng thường xuyên có UPDATE, INSERT
+Không dùng Index cho các cột mà giá trị thường xuyên bị thay đổi
+Dùng câu lệnh EXPLAIN giúp ta biết được MySQL sẽ chạy truy vấn ra sao. Nó thể hiện thứ tự join, các bảng được join như thế nào. Giúp việc xem xét để viết truy vấn tối ưu, chọn cột để Index dễ dàng hơn

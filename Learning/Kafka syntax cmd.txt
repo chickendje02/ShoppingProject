@@ -1,0 +1,14 @@
+
+// View all list topics
+.\bin\windows\kafka-topics.sh --bootstrap-server localhost:9092 --list
+//Create topic my-first-topic
+.\bin\windows\kafka-topics.sh --bootstrap-server localhost:9092 --topic my-first-topic --create --partitions 3 --replication-factor 1
+//Describe topic my-first-topic
+.\bin\windows\kafka-topics.sh --bootstrap-server localhost:9092 --topic my-first-topic --describe
+//get information of all goup
+.\bin\windows\kafka-consumer-groups.sh --list
+
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+.\bin\windows\kafka-server-start.bat .\config\server-1.properties
+.\bin\windows\kafka-server-start.bat .\config\server-2.properties

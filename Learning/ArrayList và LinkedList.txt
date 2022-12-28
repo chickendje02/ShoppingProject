@@ -1,0 +1,18 @@
+Cấu trúc dữ liệu
+ArrayList sử dụng mảng động để lưu trữ các phần tử
+ArrayList là một cấu trúc dữ liệu dựa trên chỉ mục(index) trong đó mỗi phần tử được liên kết với một chỉ mục
+LinkedList sử dụng danh sách liên kết để lưu trữ các phần tử
+Các phần tử trong linkedlist được gọi là node, mỗi node cần lưu trữ 3 thông tin: tham chiếu phần tử trước nó, giá trị của phần tử và 
+một tham chiếu tới phần tử kế tiếp
+Thao tác thêm và xóa
+ArrayList chậm hơn bởi vì nó sử dụng mảng nội bộ. Bởi vì sau khi thêm hoặc xóa các phần tử cần được sắp xếp lại
+LinkedList nhanh hơn bởi vì không cần sắp xếp lại. Nó chỉ cần cập nhật lại tham chiếu tới phần tử phía trước và sau nó
+Trường hợp sử dụng
+ArrayList chỉ có thể hoạt động như một list vì nó chỉ implements giao tiếp List.
+LinkedList có thể hoạt động như một ArrayList, stack (hàng đợi), queue (hàng đợi), Singly Linked List and Doubly Linked List vì nó implements các giao tiếp List và Deque.
+Sử dụng bộ nhớ
+ArrayList yêu cầu ít bộ nhớ hơn so với LinkedList. Bởi vì ArrayList chỉ lưu trữ dữ liệu (data) của nó và chỉ mục (index).
+LinkedList yêu cầu nhiều bộ nhớ hơn so với ArrayList. Bởi vì LinkedList lưu giữ thông tin của nó và tham chiếu tới phần tử trước và sau nó.
+Khi nào sử dụng
+ArrayList tốt hơn trong việc lưu trữ và truy xuất dữ liệu (get).
+LinkedList tốt hơn trong việc thao tác dữ liệu (thêm/ xóa).

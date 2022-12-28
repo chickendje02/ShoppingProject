@@ -1,0 +1,27 @@
+Maven dependency Scope has 6 scopes
+	Compile - default scope - it will be included classpath
+	
+	Runtime - This scope indicates that the dependency is not required for compilation, but is for execution. It is in the runtime and test classpaths, but not the compile classpath.
+	
+	Provided  - Imagine you are deploying your application to a Java EE compliant server. The server provides all libraries implementing the Java EE standard, so you don't need to deploy them with your application.
+	During development, you will need the Java EE libraries with the compile time scope, since you need to compile the classes.
+	Like you don't need to add Mysql connector since ur glassfish already has it
+	
+	Test - We use this scope to indicate that dependency isn't required at standard runtime of the application but is used only for test purposes.
+	
+	System - Similar to provided.  The main difference is that system requires us to directly point to a specific jar on the system. ( add property systemPath in dependency).The important thing to remember is that building the project with system scope dependencies may fail on different machines if dependencies aren't present or are located in a different place than the one systemPath points to
+	
+	Import - It's only available for the dependency type pom.
+
+
+As we already know, inheritance lets us share the configuration and dependencies with submodules. However, if we'd like to build or release our project in one shot, we have to declare our submodules explicitly in the parent POM. Ultimately, our parent POM will be the parent, as well as the aggregate POM.
+
+Relativepath
+f the parent POM is not located in the parent folder, we need to use the relativePath tag to refer to the location. For example, if we have a second module that should inherit the settings from module1, not from the aggregator, we must name the sibling folder:
+<artifactId>module2</artifactId>
+<parent>
+    <groupId>com.baeldung.maven-parent-pom-resolution</groupId>
+    <artifactId>module1</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../module1/pom.xml</relativePath>
+</parent>

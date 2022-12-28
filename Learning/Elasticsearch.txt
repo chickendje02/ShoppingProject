@@ -1,0 +1,5 @@
+Elasticsearch thực chất là một server chạy trên nền tàng Apache Lucene, 
+cung cấp API cho công việc lưu trữ tìm kiếm dữ liệu một cách rất nhanh chóng. 
+
+Elasticsearch đánh index trên từng chữ chứ không phải cả column như Mysql
+BoolQuery là query với nhiều conditions

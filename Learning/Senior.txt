@@ -1,0 +1,41 @@
+1.What is the Spring bean lifecycle?
+Bean life cycle is managed by the spring ioc container. When we run the program then, first of all, the spring container gets started. 
+After that, the container creates the instance of a bean as per the request, and then dependencies are injected. 
+And finally, the bean is destroyed when the spring container is closed
+
+ApplicationContext là khái niệm Spring Boot dùng để chỉ Spring IoC container, 
+tương tự như bean là đại diện cho các dependency.
+
+Cách dùng @Autowired trên field là không được khuyến khích, 
+do nó sử dụng Java reflection để inject. 
+Chúng ta nên cân nhắc đổi qua dùng inject theo kiểu constructor hoặc setter.
+
+- Annotation là gì ?
+Annotations là một tính năng mới được thêm vào từ java 5. 
+Nó được hiểu là một dạng chú thích hoặc meta data được chèn vào code java để đặc tả dữ liệu cho một đối tượng, giá trị nào đó. 
+Nó có thể được xử lý tại thời điểm compile hoặc tại thời điểm runtime.
+
+2.type bean scopes
+	singleton
+	prototype
+	request
+	session
+	application
+	websocket
+	
+Singleton scope
+When we define a bean with the singleton scope, the container creates a single instance of that bean; 
+all requests for that bean name will return the same object, which is cached. 
+Any modifications to the object will be reflected in all references to the bean. 
+This scope is the default value if no other scope is specified.
+
+Chỉ tồn tại 1 instance duy nhất, cho dù có khai báo lại thì data vẫn y vậy và data sẽ bị thay đổi
+
+Prototype scope
+A bean with the prototype scope will return a different instance every time it is requested from the container. 
+It is defined by setting the value prototype to the @Scope annotation in the bean definition
+
+Có thể khai báo nhiều instance khác nhau và độc lập với nhau
+
+
+

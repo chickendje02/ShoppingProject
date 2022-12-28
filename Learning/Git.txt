@@ -1,0 +1,35 @@
+HEAD references to the current checkout on device ( PC )
+
+All commit revisions id is the hash string with 40 character and it will store in folder .git/objects with hashed data
+
+Git Syntax command:
+git init: init a local repository and default branch is master
+git status: show status of repository like which file is edited and the branch checked out on PC
+git add: add file to stage/index 
+git commit -m "test commit 123":  Commit file with message "test commit 123"
+
+git diff : check the difference between commit and file
+git diff HEAD : check the difference between current check out and local
+
+git checkout HEAD~2: go back to 2 previous commits before HEAD of current branch
+git checkout branchTN: checkout the brach with name branchTN on git
+git checkout -b branchTN4: create and checkout the brach with name branchTN4 at the current revision
+git check out 1aae953: checkout the project at the revision 1aa953	 
+
+git log: show the commit history order by updated date desc
+press space + q to quit the log messge
+git log -1: show the last commit history
+got log --oneline: show the commit revision and message history
+git log fileTn.txt: show the commit hisstory of the file wwith name fileTn.txt
+git log --author="abc": show the commit history of the author "abc"
+
+To rename a file in git we use "git mv" so the index of the renamed file will be remained the same
+git mv fileTn.txt fileTn-Tn.txt: rename file from fileTn.txt to fileTn-Tn.txt
+
+git rm fileTn.txt: remove fileTn.txt from stage/index
+git restore --staged fileTn.txt: restore fileTn.txt after removing
+
+git reset :
+--soft: only reset Repository area to specific revision
+--mixed: 
+--hard: move all the file in working, index and repositoy to specific revision

@@ -1,0 +1,11 @@
+
+// Create- Token  -- POST METHOD
+http://localhost:8765/partner-webservice/ddd/authentication/create-token
+
+{
+    "loginId":"PB",
+    "role":"PARTNER"
+}
+
+
+http://localhost:8765/partner-webservice/ddd/agency/sub-user-management/search-sub-user?option=USERNAME&keyword=

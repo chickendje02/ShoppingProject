@@ -1,5 +1,6 @@
 package com.excercise.productservice.service.impl;
 
+import com.excercise.productservice.enumeration.ActionType;
 import com.excercise.productservice.enumeration.TypeImage;
 import com.excercise.productservice.exception.CommonBusinessException;
 import com.excercise.productservice.model.dto.ImageDTO;
@@ -8,10 +9,13 @@ import com.excercise.productservice.model.filter.ProductFilter;
 import com.excercise.productservice.model.orm.Image;
 import com.excercise.productservice.model.orm.Product;
 import com.excercise.productservice.model.orm.Vendor;
+import com.excercise.productservice.model.update.LogUpdateModel;
 import com.excercise.productservice.model.update.ProductUpdate;
 import com.excercise.productservice.repository.ImageRepository;
 import com.excercise.productservice.repository.ProductRepository;
+import com.excercise.productservice.service.LogService;
 import com.excercise.productservice.service.ProductService;
+import com.excercise.productservice.utils.UtilFunction;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -30,9 +34,12 @@ public class ProductServiceImpl implements ProductService {
 
     ImageRepository imageRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, ImageRepository imageRepository) {
+    LogService logService;
+
+    public ProductServiceImpl(ProductRepository productRepository, ImageRepository imageRepository, LogService logService) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
+        this.logService = logService;
     }
 
     @Override
@@ -45,13 +52,18 @@ public class ProductServiceImpl implements ProductService {
                 result.add(this.mappingToProduct(product));
             });
         }
+        LogUpdateModel logUpdateModel = this.prepareLogModelData(ActionType.SEARCH, UtilFunction.convertToJson(filter));
+        logService.saveLog(logUpdateModel);
         return result;
     }
+
 
     @Override
     public ProductDTO getProductDetail(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
+            LogUpdateModel logUpdateModel = this.prepareLogModelData(ActionType.SEARCH, UtilFunction.convertToJson(product.get()));
+            logService.saveLog(logUpdateModel);
             return this.mappingToProduct(product.get());
         }
         throw new CommonBusinessException("Not found Product", HttpStatus.NOT_FOUND.value());
@@ -108,6 +120,13 @@ public class ProductServiceImpl implements ProductService {
         return ImageDTO.builder()
                 .imageName(image.getImageName())
                 .typeImage(TypeImage.valueOf(image.getTypeImage()))
+                .build();
+    }
+
+    private LogUpdateModel prepareLogModelData(ActionType actionType, String content) {
+        return LogUpdateModel.builder()
+                .actionType(actionType)
+                .content(content)
                 .build();
     }
 

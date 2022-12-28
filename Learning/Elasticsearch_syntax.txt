@@ -1,0 +1,39 @@
+// Create Index
+Put method 172.21.2.63:9200/productindex
+Request body
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 1
+        },
+        "analysis": {
+            "analyzer": {
+                "analyzer-name": {
+                    "type": "custom",
+                    "tokenizer": "keyword",
+                    "filter": "lowercase"
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "name": {
+                "type": "text"
+            },
+            "price": {
+                "type": "double"
+            },
+            "quantity": {
+                "type": "integer"
+            },
+            "category": {
+                "type": "keyword"
+            }
+        }
+    }
+}
+
+//Insert data
+Put method 172.21.2.63:9200/productindex/_doc/1

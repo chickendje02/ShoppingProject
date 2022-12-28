@@ -1,0 +1,39 @@
+Linux Syntax command:
+cd ~/Desktop : move to Desktop folder
+ls : show all file in a folder exclude the hidden file
+ls - a : show all the file include the hidden file
+echo: like systemout in java
+mkdir folderTN: create new folder with name folderTN
+rmdir folderTN: remove folder with name folderTN
+touch file1.txt : create new file with name file1 and type is txt
+rm -rf folderTn: force delete folder evenwhen folderTn is not empty (risky command)
+echo "text 12345" > fileTn.txt: create a file with name txt and content inside is "text 12345"
+cat fileTn.txt: view fileTn.txt
+vi fileTn.txt: open fileTn.txt
+There are 2 modes in "vi" command
+- command mode: save file, copy,
+ + :w : save
+ + :q : quit
+- insert mode: add text, etc
+ssh dev@172.23.20.101
+devs@Code88!
+sudo chmod -R 777 sherwin.doan/
+
+scp .\wheel-0.0.1-SNAPSHOT.jar -i ssh dev@172.23.20.101:/opt/gin.le
+docker build -t jaa/wheel . --build-arg JARFILE=wheel-0.0.1-SNAPSHOT.jar --build-arg USER_TIMEZONE=GMT-4 --no-cache
+docker run -d -p 8091:8080 jaa/wheel
+
+scp .\sherwin.doan -i ssh dev@172.23.20.101:/opt/sherwin.doan
+
+
+
+docker build -t naming-server . --build-arg JARFILE=naming-server-0.0.1-SNAPSHOT.jar --build-arg USER_TIMEZONE=GMT-4 --build-arg SERVER_PORTS=8761 --no-cache
+docker build -t api-gateway . --build-arg JARFILE=api-gateway-0.0.1-SNAPSHOT.jar --build-arg USER_TIMEZONE=GMT-4 --build-arg SERVER_PORTS=8765 --no-cache
+docker build -t domain-agency-sub-user-management-2.0.0 . --build-arg JARFILE=domain-agency-sub-user-management-2.0.0.jar --build-arg USER_TIMEZONE=GMT-4 --build-arg SERVER_PORTS=9990 --no-cache
+docker run -p 8761:8761 -d naming-server
+docker run --network=sherwin_test -p 8765:8765 -d api-gateway
+docker run -p 9990:9990 -d domain-agency-sub-user-management-2.0.0
+docker run -p 8888:8888 -d ludus-config-0.0.1 
+
+
+docker build -t ludus-config-0.0.1 . --build-arg JARFILE=ludus-config-0.0.1-SNAPSHOT.jar --build-arg USER_TIMEZONE=GMT-4 --build-arg SERVER_PORTS=8888 --no-cache

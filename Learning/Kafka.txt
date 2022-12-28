@@ -1,0 +1,55 @@
+Kafka
+Document: https://kafka.apache.org/documentation
+
+Event streaming is the practice of capturing data in real-time from event sources like databases, sensors, mobile devices, cloud services, and software applications in the form of streams of events; storing these event streams durably for later retrieval; manipulating, processing, and reacting to the event streams in real-time as well as retrospectively; and routing the event streams to different destination technologies as needed. Event streaming thus ensures a continuous flow and interpretation of data so that the right information is at the right place, at the right time.
+
+a Kafka cluster is highly scalable and fault-tolerant: if any of its servers fails, the other servers will take over their work to ensure continuous operations without any data loss.
+
+In addition to command line tooling for management and administration tasks, Kafka has five core APIs for Java and Scala:
+
+The Admin API to manage and inspect topics, brokers, and other Kafka objects.
+The Producer API to publish (write) a stream of events to one or more Kafka topics.
+The Consumer API to subscribe to (read) one or more topics and to process the stream of events produced to them.
+The Kafka Streams API to implement stream processing applications and microservices. It provides higher-level functions to process event streams, including transformations, stateful operations like aggregations and joins, windowing, processing based on event-time, and more. Input is read from one or more topics in order to generate output to one or more topics, effectively transforming the input streams to output streams.
+The Kafka Connect API to build and run reusable data import/export connectors that consume (read) or produce (write) streams of events from and to external systems and applications so they can integrate with Kafka. For example, a connector to a relational database like PostgreSQL might capture every change to a set of tables. However, in practice, you typically don't need to implement your own connectors because the Kafka community already provides hundreds of ready-to-use connectors.
+
+Why we use Kafka
+Reliability − Kafka is distributed, partitioned, replicated and fault tolerance.
+Scalability − Kafka messaging system scales easily without down time..
+Durability − Kafka uses Distributed commit log which means messages persists on disk as fast as possible, hence it is durable..
+Performance − Kafka has high throughput for both publishing and subscribing messages. It maintains stable performance even many TB of messages are stored.
+Kafka is very fast and guarantees zero downtime and zero data loss.
+Kafka also acts as a very scalable and fault-tolerant storage system by writing and replicating all data to disk. By default, Kafka keeps data stored on disk until it runs out of space
+
+Following is the step wise workflow of the Pub-Sub Messaging −
+Producers send message to a topic at regular intervals.
+Kafka broker stores all messages in the partitions configured for that particular topic. It ensures the messages are equally shared between partitions. If the producer sends two messages and there are two partitions, Kafka will store one message in the first partition and the second message in the second partition.
+Consumer subscribes to a specific topic.
+Once the consumer subscribes to a topic, Kafka will provide the current offset of the topic to the consumer and also saves the offset in the Zookeeper ensemble.
+Consumer will request the Kafka in a regular interval (like 100 Ms) for new messages.
+Once Kafka receives the messages from producers, it forwards these messages to the consumers.
+Consumer will receive the message and process it.
+Once the messages are processed, consumer will send an acknowledgement to the Kafka broker.
+Once Kafka receives an acknowledgement, it changes the offset to the new value and updates it in the Zookeeper. Since offsets are maintained in the ookeeper, the consumer can read next message correctly even during server outrages.
+This above flow will repeat until the consumer stops the request.
+Consumer has the option to rewind/skip to the desired offset of a topic at any time and read all the subsequent messages.
+
+Replication có nghĩa là nó sẽ store data lại và gửi lên con chính khi con chính bị down vì thế mới có khái niệm read and write
+số lượng khả dụng consumer sẽ dựa trên số lượng broker
+Ví dụ có 2 broker thì chỉ nên có 2 consumer
+Nếu có 2 broker mà có 3 consumer thì consumer còn lại sẽ không làm gì hết => phí tài nguyên
+Message được lưu tại offset của partition, partition được lưu ở topic. Topic được lưu trữ trên file, trên disk, và tất cả đều được lưu trữ trên server. Và server là một Kafka broker trong Kafka cluster.
+Các broker trên các server khác nhau sẽ được deploy trên cùng 1 zookeeper
+
+
+Nếu để giá trị replication factor cao quá cũng sẽ gặp vấn đề liên quan đến đồng bộ. Ngoài ra Kafka cũng không cho phép replication factor vượt quá số lượng broker.
+
+Khi 1 topic có nhiều partition thì khi get data lên có thể thứ tự không đúng vì nó phân chia
+
+Idempotent nói về việc một hành động có thể lặp đi lặp lại nhiều lần mà không gây ảnh hưởng gì đến hệ thống. Ví dụ như RESTful API GET method được gọi là idempotent API.
+
+Producer transaction mang ý nghĩa tương tự, chúng ta cần gửi các message đến nhiều topic khác nhau và mong muốn tất cả đều đến đích, nếu không thì không message nào gửi thành công.
+
+
+Source connector: pull data từ source system và gửi đến Kafka cluster.
+Sink connector: consume data từ topic và sink đến hệ thống đích.
