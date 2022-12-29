@@ -13,6 +13,7 @@ import com.excercise.productservice.model.update.LogUpdateModel;
 import com.excercise.productservice.model.update.ProductUpdate;
 import com.excercise.productservice.repository.ImageRepository;
 import com.excercise.productservice.repository.ProductRepository;
+import com.excercise.productservice.repository.VendorRepository;
 import com.excercise.productservice.service.LogService;
 import com.excercise.productservice.service.ProductService;
 import com.excercise.productservice.utils.UtilFunction;
@@ -24,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,22 +36,27 @@ public class ProductServiceImpl implements ProductService {
 
     LogService logService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ImageRepository imageRepository, LogService logService) {
+    VendorRepository vendorRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository, ImageRepository imageRepository, LogService logService, VendorRepository vendorRepository) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
         this.logService = logService;
+        this.vendorRepository = vendorRepository;
     }
 
     @Override
     public List<ProductDTO> findAll(ProductFilter filter) {
         List<ProductDTO> result = new ArrayList<>();
-        Optional<List<Product>> products = Optional.of(productRepository.findAll());
-//        Optional<List<Product>> products =  productRepository.findAllByProductNameContainsAndProductPriceLessThanAndVendorVendorNameContains(filter.getName(), filter.getPrice(),filter.getVendorName());
-        if (products.isPresent()) {
-            products.get().forEach(product -> {
-                result.add(this.mappingToProduct(product));
-            });
+        Optional<Vendor> vendor = vendorRepository.findById(filter.getVendorId());
+        if (vendor.isEmpty()) {
+            throw new CommonBusinessException("Invalid Vendor");
         }
+        Optional<List<Product>> products = productRepository.findAllByProductNameContainsAndVendorIdAndProductPriceLessThan(filter.getName(), filter.getVendorId(), filter.getPrice());
+        products.ifPresent(productList -> productList.forEach(product -> {
+            List<Image> images = imageRepository.findAllByProductId(product.getId());
+            result.add(this.mappingToProduct(product, vendor.get().getVendorName(), images));
+        }));
         LogUpdateModel logUpdateModel = this.prepareLogModelData(ActionType.SEARCH, UtilFunction.convertToJson(filter));
         logService.saveLog(logUpdateModel);
         return result;
@@ -64,7 +69,9 @@ public class ProductServiceImpl implements ProductService {
         if (product.isPresent()) {
             LogUpdateModel logUpdateModel = this.prepareLogModelData(ActionType.SEARCH, UtilFunction.convertToJson(product.get()));
             logService.saveLog(logUpdateModel);
-            return this.mappingToProduct(product.get());
+            Optional<Vendor> vendor = vendorRepository.findById(product.get().getVendorId());
+            List<Image> images = imageRepository.findAllByProductId(product.get().getId());
+            return this.mappingToProduct(product.get(), vendor.get().getVendorName(),images);
         }
         throw new CommonBusinessException("Not found Product", HttpStatus.NOT_FOUND.value());
     }
@@ -74,10 +81,10 @@ public class ProductServiceImpl implements ProductService {
     public void removeProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
-            Set<Image> images = product.get().getImages();
-            if (!images.isEmpty()) {
-                imageRepository.deleteByProductId(id);
-            }
+//            Set<Image> images = product.get().getImages();
+//            if (!images.isEmpty()) {
+//                imageRepository.deleteByProductId(id);
+//            }
             productRepository.deleteById(id);
         } else {
             throw new CommonBusinessException("Not found Product", HttpStatus.NOT_FOUND.value());
@@ -94,25 +101,23 @@ public class ProductServiceImpl implements ProductService {
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
                 .typeId(product.getTypeId())
-                .vendor(vendor)
                 .lastUpdateBy(StringUtils.EMPTY)
                 .build();
-//        product.getImages().forEach(image -> image.setProduct(product));
         Product savedProduct = productRepository.save(model);
         if (!product.getImageUpdate().isEmpty()) {
-            List<Image> list = product.getImageUpdate().stream().map(image -> image.buildModelCreate(image, savedProduct)).collect(Collectors.toList());
+            List<Image> list = product.getImageUpdate().stream().map(image -> image.buildModelCreate(image, savedProduct.getId())).collect(Collectors.toList());
             imageRepository.saveAll(list);
         }
     }
 
-    private ProductDTO mappingToProduct(Product product) {
-        List<ImageDTO> imageDTOS = product.getImages().stream().map(this::mappingToImage).collect(Collectors.toList());
+    private ProductDTO mappingToProduct(Product product, String vendorName, List<Image> images) {
+        List<ImageDTO> imageDTOList = images.stream().map(this::mappingToImage).collect(Collectors.toList());
         return ProductDTO.builder()
                 .id(product.getId())
                 .productName(product.getProductName())
                 .typeId(product.getTypeId())
-                .listImages(imageDTOS)
-                .vendorName(product.getVendor().getVendorName())
+                .listImages(imageDTOList)
+                .vendorName(vendorName)
                 .build();
     }
 

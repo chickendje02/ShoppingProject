@@ -1,8 +1,11 @@
 eureka-server (service-discovery)
     localhost:8761
 product-service
+    // Filter to get all product
     GET - localhost:8000/product/find-all?name=&vendorName=&price=512
+    // Get specific product
     GET DETAIL WITH Path Variable {id}  - localhost:8000/product/get-product-detail/{id}
+    // Insert a Product
     POST - localhost:8000/product
         {
             "productName": "TN1234",
@@ -24,6 +27,7 @@ product-service
                 }
             ]
         }
+    // Update a product
     PUT -  localhost:8000/product
         {
             "id": "1"
@@ -46,7 +50,10 @@ product-service
                 }
             ]
         }
+   // Delete Product
     DELETE with path variable - localhost:8000/product/delete-product/{id}
 
 api-gateway
     localhost:8765/product-service/product/find-all?name=&vendorName=&price=512
+
+admin-service

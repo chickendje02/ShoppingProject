@@ -29,13 +29,7 @@ public class Product {
 
     private Long typeId;
 
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Image> images;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "vendor_id")
-    @JsonIgnore
-    private Vendor vendor;
+    private Long vendorId;
 
     private String lastUpdateBy;
 }

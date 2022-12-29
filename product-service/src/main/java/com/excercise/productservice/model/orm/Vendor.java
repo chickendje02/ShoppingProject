@@ -16,7 +16,4 @@ public class Vendor {
     private String vendorName;
 
     private String country;
-
-    @OneToMany(mappedBy = "vendor")
-    private List<Product> products;
 }

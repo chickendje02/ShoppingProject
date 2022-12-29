@@ -12,11 +12,11 @@ public class ImageUpdate {
 
     private TypeImage typeImage;
 
-    public Image buildModelCreate(ImageUpdate image, Product savedProduct) {
+    public Image buildModelCreate(ImageUpdate image, Long productId) {
         return Image.builder()
                 .imageName(image.getImageName())
                 .typeImage(image.getTypeImage().toString())
-                .product(savedProduct)
+                .productId(productId)
                 .build();
     }
 }

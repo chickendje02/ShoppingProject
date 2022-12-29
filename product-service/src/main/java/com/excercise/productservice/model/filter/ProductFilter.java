@@ -11,6 +11,5 @@ public class ProductFilter {
 
     private BigDecimal price;
 
-    private String vendorName;
-
+    private Long vendorId;
 }
