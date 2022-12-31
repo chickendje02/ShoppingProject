@@ -2,7 +2,7 @@ package com.excercise.productservice.controller;
 
 import com.excercise.productservice.model.dto.ProductDTO;
 import com.excercise.productservice.model.filter.ProductFilter;
-import com.excercise.productservice.model.update.ProductUpdate;
+import com.excercise.productservice.model.update.ProductUpdateModel;
 import com.excercise.productservice.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,13 +37,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity addProduct(@RequestBody ProductUpdate product) {
+    public ResponseEntity addProduct(@RequestBody ProductUpdateModel product) {
         productService.saveProduct(product);
         return ResponseEntity.ok("Ok");
     }
 
     @PutMapping
-    public ResponseEntity updateProduct(@RequestBody ProductUpdate product) {
+    public ResponseEntity updateProduct(@RequestBody ProductUpdateModel product) {
         productService.saveProduct(product);
         return ResponseEntity.ok("Ok");
     }

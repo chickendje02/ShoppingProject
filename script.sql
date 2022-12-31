@@ -1,11 +1,22 @@
 CREATE
 DATABASE mydb;
+
+DROP TABLE IF EXISTS type_product_sherwin;
+CREATE TABLE type_product_sherwin
+(
+    id               INT(11) PRIMARY KEY AUTO_INCREMENT,
+    type_name        INT(11),
+    last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
+    last_update_by   VARCHAR(50)    DEFAULT ''
+);
+
 DROP TABLE IF EXISTS product_sherwin;
 CREATE TABLE product_sherwin
 (
     id               INT(11) PRIMARY KEY AUTO_INCREMENT,
     product_name     VARCHAR(100)   DEFAULT '',
     product_price    DECIMAL(25, 7) DEFAULT 0,
+    product_quantity INT,
     type_id          INT(11),
     vendor_id        INT(11),
     last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
@@ -18,7 +29,9 @@ CREATE TABLE image_sherwin
     id         INT(11) PRIMARY KEY AUTO_INCREMENT,
     image_name TEXT,
     type_image ENUM('MAIN','SUB'),
-    product_id INT(11)
+    product_id INT(11),
+    last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
+    last_update_by   VARCHAR(50)    DEFAULT ''
 
 );
 
@@ -27,7 +40,9 @@ CREATE TABLE vendor_sherwin
 (
     id          INT(11) PRIMARY KEY AUTO_INCREMENT,
     vendor_name TEXT,
-    country     VARCHAR(50)
+    country     VARCHAR(50),
+    last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
+    last_update_by   VARCHAR(50)    DEFAULT ''
 );
 
 DROP TABLE IF EXISTS customer_logging_sherwin;

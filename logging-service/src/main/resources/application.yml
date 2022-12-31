@@ -7,7 +7,7 @@ my:
 #  url: jdbc:mysql://localhost:3306/mydb
   username: trungnguyen
   password: trungnguyen
-  url: jdbc:mysql://171.248.147.137:3306/mydb
+  url: jdbc:mysql://171.249.155.50:3306/mydb
 
 
 

@@ -1,57 +1,77 @@
 eureka-server (service-discovery)
     localhost:8761
 product-service
-    // Filter to get all product
-    GET - localhost:8000/product/find-all?name=&vendorName=&price=512
-    // Get specific product
-    GET DETAIL WITH Path Variable {id}  - localhost:8000/product/get-product-detail/{id}
-    // Insert a Product
-    POST - localhost:8000/product
-        {
-            "productName": "TN1234",
-            "productPrice": 200.23,
-            "typeId": 1,
-            "vendorId": 1,
-            "imageUpdate": [
-                {
-                    "imageName": "Test Image",
-                    "typeImage": "SUB"
-                },
-                {
-                    "imageName": "Test MAIN Image",
-                    "typeImage": "MAIN"
-                },
-                {
-                    "imageName": "Test SUB Image",
-                    "typeImage": "SUB"
-                }
-            ]
-        }
-    // Update a product
-    PUT -  localhost:8000/product
-        {
-            "id": "1"
-            "productName": "TN1234",
-            "productPrice": 200.23,
-            "typeId": 1,
-            "vendorId": 1,
-            "imageUpdate": [
-                {
-                    "imageName": "Test Image",
-                    "typeImage": "SUB"
-                },
-                {
-                    "imageName": "Test MAIN Image",
-                    "typeImage": "MAIN"
-                },
-                {
-                    "imageName": "Test SUB Image",
-                    "typeImage": "SUB"
-                }
-            ]
-        }
-   // Delete Product
-    DELETE with path variable - localhost:8000/product/delete-product/{id}
+    //Vendor API
+        //Get all Vendors
+            - GET localhost:8000/vendor
+        // Add a Vendor
+        - POST localhost:8000/vendor
+                "vendorName":"Trung Nguyen 124",
+                "country" : ""
+            }
+        // Update a Vendor
+        - PUT localhost:8000/vendor
+            {
+                "vendorId": 7
+                "vendorName":"Trung Nguyen 124",
+                "country" : ""
+            }
+         // Delete a Vendor
+         - DELETE localhost:8000/{id}
+            Example: localhost:8000/7
+
+    Product API
+        // Filter to get all product
+        GET - localhost:8000/product/find-all?name=&vendorName=&price=512
+        // Get specific product
+        GET DETAIL WITH Path Variable {id}  - localhost:8000/product/get-product-detail/{id}
+        // Insert a Product
+        POST - localhost:8000/product
+            {
+                "productName": "TN1234",
+                "productPrice": 200.23,
+                "typeId": 1,
+                "vendorId": 1,
+                "imageUpdate": [
+                    {
+                        "imageName": "Test Image",
+                        "typeImage": "SUB"
+                    },
+                    {
+                        "imageName": "Test MAIN Image",
+                        "typeImage": "MAIN"
+                    },
+                    {
+                        "imageName": "Test SUB Image",
+                        "typeImage": "SUB"
+                    }
+                ]
+            }
+        // Update a product
+        PUT -  localhost:8000/product
+            {
+                "id": "1"
+                "productName": "TN1234",
+                "productPrice": 200.23,
+                "typeId": 1,
+                "vendorId": 1,
+                "imageUpdate": [
+                    {
+                        "imageName": "Test Image",
+                        "typeImage": "SUB"
+                    },
+                    {
+                        "imageName": "Test MAIN Image",
+                        "typeImage": "MAIN"
+                    },
+                    {
+                        "imageName": "Test SUB Image",
+                        "typeImage": "SUB"
+                    }
+                ]
+            }
+       // Delete Product
+        DELETE with path variable - localhost:8000/product/delete-product/{id}
 
 api-gateway
     localhost:8765/product-service/product/find-all?name=&vendorName=&price=512
