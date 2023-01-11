@@ -2,8 +2,10 @@ package com.excercise.productservice.service.impl;
 
 import com.excercise.productservice.exception.CommonBusinessException;
 import com.excercise.productservice.model.dto.VendorDTO;
+import com.excercise.productservice.model.orm.Product;
 import com.excercise.productservice.model.orm.Vendor;
 import com.excercise.productservice.model.update.VendorUpdateModel;
+import com.excercise.productservice.repository.ProductRepository;
 import com.excercise.productservice.repository.VendorRepository;
 import com.excercise.productservice.service.VendorService;
 import com.excercise.productservice.utils.CommonQueryHandler;
@@ -13,12 +15,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class VendorServiceImpl extends CommonQueryHandler<Vendor, VendorDTO> implements VendorService {
 
     @Autowired
     VendorRepository vendorRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @Override
     public Map<String, Object> getListVendors() {
@@ -46,6 +52,7 @@ public class VendorServiceImpl extends CommonQueryHandler<Vendor, VendorDTO> imp
 
     @Override
     public void deleteVendor(Long id) {
+        this.validationOnDelete(id);
         vendorRepository.deleteById(id);
     }
 
@@ -76,6 +83,13 @@ public class VendorServiceImpl extends CommonQueryHandler<Vendor, VendorDTO> imp
                 throw new CommonBusinessException("Vendor Name is existed");
             }
         });
+    }
+
+    private void validationOnDelete(Long vendorId) {
+        Optional<Product> product = productRepository.findByVendorId(vendorId);
+        if (!product.isEmpty()) {
+            throw new CommonBusinessException("Vendor is in used");
+        }
     }
 
     private Vendor markupData(VendorUpdateModel model) {

@@ -19,13 +19,13 @@ public class TypeProductController {
     }
 
     @PostMapping
-    public ResponseEntity saveProduct(@RequestBody TypeProductUpdateModel model) {
+    public ResponseEntity saveTypeProduct(@RequestBody TypeProductUpdateModel model) {
         typeProductService.addOrUpdateTypeProduct(model);
         return ResponseEntity.ok("Ok");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteProduct(@PathVariable Long id) {
+    public ResponseEntity deleteTypeProduct(@PathVariable Long id) {
         typeProductService.deleteTypeProduct(id);
         return ResponseEntity.ok("Ok");
     }

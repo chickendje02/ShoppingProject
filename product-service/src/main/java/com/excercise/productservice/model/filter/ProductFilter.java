@@ -12,4 +12,8 @@ public class ProductFilter {
     private BigDecimal price;
 
     private Long vendorId;
+
+    private int pageNumber;
+
+    private int pageSize;
 }

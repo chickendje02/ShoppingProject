@@ -2,8 +2,10 @@ package com.excercise.productservice.service.impl;
 
 import com.excercise.productservice.exception.CommonBusinessException;
 import com.excercise.productservice.model.dto.TypeProductDTO;
+import com.excercise.productservice.model.orm.Product;
 import com.excercise.productservice.model.orm.TypeProduct;
 import com.excercise.productservice.model.update.TypeProductUpdateModel;
+import com.excercise.productservice.repository.ProductRepository;
 import com.excercise.productservice.repository.TypeProductRepository;
 import com.excercise.productservice.service.TypeProductService;
 import org.apache.commons.lang.StringUtils;
@@ -12,12 +14,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TypeProductServiceImpl implements TypeProductService {
 
     @Autowired
     TypeProductRepository typeProductRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @Override
     public List<TypeProductDTO> findAll() {
@@ -38,7 +44,8 @@ public class TypeProductServiceImpl implements TypeProductService {
 
     @Override
     public void deleteTypeProduct(Long id) {
-
+        this.validationDelete(id);
+        typeProductRepository.deleteById(id);
     }
 
     private void validationAddOrUpdate(TypeProductUpdateModel model) {
@@ -53,8 +60,11 @@ public class TypeProductServiceImpl implements TypeProductService {
         });
     }
 
-    private void validationDelete() {
-
+    private void validationDelete(Long typeProductId) {
+        Optional<Product> product = productRepository.findByTypeId(typeProductId);
+        if (!product.isEmpty()) {
+            throw new CommonBusinessException("Type is in used");
+        }
     }
 
     private TypeProductDTO mappingToDTO(TypeProduct typeProduct) {

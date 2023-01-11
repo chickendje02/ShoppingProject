@@ -21,6 +21,8 @@ import com.excercise.productservice.service.ProductService;
 import com.excercise.productservice.utils.UtilFunction;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,14 +55,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> findAll(ProductFilter filter) {
         List<ProductDTO> result = new ArrayList<>();
-        Optional<Vendor> vendor = vendorRepository.findById(filter.getVendorId());
-        if (vendor.isEmpty()) {
-            throw new CommonBusinessException("Invalid Vendor");
+        Optional<Vendor> vendor = Optional.empty();
+        boolean isFilteredByVendor = Objects.nonNull(filter.getVendorId()) && filter.getVendorId() > 0;
+        boolean isFilteredByProductPrice = Objects.nonNull(filter.getPrice()) && filter.getPrice().compareTo(BigDecimal.ZERO) > 0;
+        if (isFilteredByVendor) {
+            vendor = vendorRepository.findById(filter.getVendorId());
+            if (vendor.isEmpty()) {
+                throw new CommonBusinessException("Invalid Vendor");
+            }
         }
-        Optional<List<Product>> products = productRepository.findAllByProductNameContainsAndVendorIdAndProductPriceLessThan(filter.getName(), filter.getVendorId(), filter.getPrice());
+        Pageable pageRequest = PageRequest.of(filter.getPageNumber(), filter.getPageSize());
+        String vendorName = vendor.isPresent() ? vendor.get().getVendorName() : StringUtils.EMPTY;
+        Optional<List<Product>> products;
+        if (isFilteredByVendor && isFilteredByProductPrice) {
+            products = productRepository.findAllByProductNameContainsAndVendorIdAndProductPriceLessThan(filter.getName(), filter.getVendorId(), filter.getPrice(), pageRequest);
+        } else if (isFilteredByVendor) {
+            products = productRepository.findAllByProductNameContainsAndVendorId(filter.getName(), filter.getVendorId(), pageRequest);
+        } else if (isFilteredByProductPrice) {
+            products = productRepository.findAllByProductNameContainsAndProductPriceLessThan(filter.getName(), filter.getPrice(), pageRequest);
+        } else {
+            products = productRepository.findAllByProductNameContains(filter.getName(), pageRequest);
+        }
         products.ifPresent(productList -> productList.forEach(product -> {
             List<Image> images = imageRepository.findAllByProductId(product.getId());
-            result.add(this.mappingToProduct(product, vendor.get().getVendorName(), images));
+            result.add(this.mappingToProduct(product, vendorName, images));
         }));
         LogUpdateModel logUpdateModel = this.prepareLogModelData(ActionType.SEARCH, UtilFunction.convertToJson(filter));
         logService.saveLog(logUpdateModel);
@@ -86,10 +104,7 @@ public class ProductServiceImpl implements ProductService {
     public void removeProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
-//            Set<Image> images = product.get().getImages();
-//            if (!images.isEmpty()) {
-//                imageRepository.deleteByProductId(id);
-//            }
+            imageRepository.deleteAllByProductId(id);
             productRepository.deleteById(id);
         } else {
             throw new CommonBusinessException("Not found Product", HttpStatus.NOT_FOUND.value());
@@ -113,9 +128,11 @@ public class ProductServiceImpl implements ProductService {
         return ProductDTO.builder()
                 .id(product.getId())
                 .productName(product.getProductName())
+                .productPrice(product.getProductPrice())
                 .typeId(product.getTypeId())
                 .listImages(imageDTOList)
-                .vendorName(vendorName)
+                .vendorId(product.getVendorId())
+//                .vendorName(vendorName)
                 .build();
     }
 
