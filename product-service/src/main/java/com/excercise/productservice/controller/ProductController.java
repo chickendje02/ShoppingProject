@@ -1,18 +1,16 @@
 package com.excercise.productservice.controller;
 
+import com.excercise.productservice.enumeration.ActionType;
 import com.excercise.productservice.model.dto.ProductDTO;
 import com.excercise.productservice.model.filter.ProductFilter;
+import com.excercise.productservice.model.update.LogUpdateModel;
 import com.excercise.productservice.model.update.ProductUpdateModel;
+import com.excercise.productservice.service.LogService;
 import com.excercise.productservice.service.ProductService;
+import com.excercise.productservice.utils.UtilFunction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,19 +18,24 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
+    @Autowired
     ProductService productService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    @Autowired
+    LogService logService;
 
     @GetMapping("/find-all")
     public List<ProductDTO> findAll(ProductFilter filter) {
+        // Insert Log
+        LogUpdateModel logUpdateModel = LogUpdateModel.prepareLogModelData(ActionType.SEARCH, UtilFunction.convertToJson(filter));
+        logService.saveLog(logUpdateModel);
         return productService.findAll(filter);
     }
 
     @GetMapping("/get-product-detail/{id}")
     public ResponseEntity getProductDetail(@PathVariable Long id) {
+        LogUpdateModel logUpdateModel = LogUpdateModel.prepareLogModelData(ActionType.VIEW, UtilFunction.convertToJson(id));
+        logService.saveLog(logUpdateModel);
         return ResponseEntity.ok(productService.getProductDetail(id));
     }
 

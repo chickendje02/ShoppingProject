@@ -13,6 +13,8 @@ public class ProductUpdateModel {
 
     private BigDecimal productPrice;
 
+    private int productQuantity;
+
     private Long typeId;
 
     private Long vendorId;

@@ -9,5 +9,7 @@ public class VendorUpdateModel {
 
     private String vendorName;
 
-    private String country;
+    private String vendorAddress;
+
+    private String vendorPhoneNumber;
 }

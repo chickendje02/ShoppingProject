@@ -15,5 +15,8 @@ public class Vendor {
 
     private String vendorName;
 
-    private String country;
+    private String vendorAddress;
+
+    private String vendorPhoneNumber;
+
 }

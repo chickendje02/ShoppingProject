@@ -16,4 +16,9 @@ public class ProductFilter {
     private int pageNumber;
 
     private int pageSize;
+
+    @Override
+    public String toString() {
+        return name + ":" + price + ":" + vendorId + ":" + pageNumber + ":" + pageSize;
+    }
 }

@@ -1,6 +1,7 @@
 package com.excercise.productservice.service.impl;
 
-import com.excercise.productservice.enumeration.ActionType;
+import com.excercise.productservice.cache.CacheModel;
+import com.excercise.productservice.cache.ProductCache;
 import com.excercise.productservice.enumeration.TypeImage;
 import com.excercise.productservice.exception.CommonBusinessException;
 import com.excercise.productservice.model.dto.ImageDTO;
@@ -10,15 +11,12 @@ import com.excercise.productservice.model.orm.Image;
 import com.excercise.productservice.model.orm.Product;
 import com.excercise.productservice.model.orm.TypeProduct;
 import com.excercise.productservice.model.orm.Vendor;
-import com.excercise.productservice.model.update.LogUpdateModel;
 import com.excercise.productservice.model.update.ProductUpdateModel;
 import com.excercise.productservice.repository.ImageRepository;
 import com.excercise.productservice.repository.ProductRepository;
 import com.excercise.productservice.repository.TypeProductRepository;
 import com.excercise.productservice.repository.VendorRepository;
-import com.excercise.productservice.service.LogService;
 import com.excercise.productservice.service.ProductService;
-import com.excercise.productservice.utils.UtilFunction;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -37,14 +35,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private static final Long TIME_EXPIRED = 600000L;
+
     @Autowired
     ProductRepository productRepository;
 
     @Autowired
     ImageRepository imageRepository;
-
-    @Autowired
-    LogService logService;
 
     @Autowired
     VendorRepository vendorRepository;
@@ -55,6 +52,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> findAll(ProductFilter filter) {
         List<ProductDTO> result = new ArrayList<>();
+        CacheModel<List<ProductDTO>> dataCache = ProductCache.getData(filter.toString());
+        if (Objects.nonNull(dataCache)) {
+            return dataCache.getData();
+        }
         Optional<Vendor> vendor = Optional.empty();
         boolean isFilteredByVendor = Objects.nonNull(filter.getVendorId()) && filter.getVendorId() > 0;
         boolean isFilteredByProductPrice = Objects.nonNull(filter.getPrice()) && filter.getPrice().compareTo(BigDecimal.ZERO) > 0;
@@ -65,7 +66,6 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         Pageable pageRequest = PageRequest.of(filter.getPageNumber(), filter.getPageSize());
-        String vendorName = vendor.isPresent() ? vendor.get().getVendorName() : StringUtils.EMPTY;
         Optional<List<Product>> products;
         if (isFilteredByVendor && isFilteredByProductPrice) {
             products = productRepository.findAllByProductNameContainsAndVendorIdAndProductPriceLessThan(filter.getName(), filter.getVendorId(), filter.getPrice(), pageRequest);
@@ -78,23 +78,26 @@ public class ProductServiceImpl implements ProductService {
         }
         products.ifPresent(productList -> productList.forEach(product -> {
             List<Image> images = imageRepository.findAllByProductId(product.getId());
-            result.add(this.mappingToProduct(product, vendorName, images));
+            result.add(this.mappingToProduct(product, images));
         }));
-        LogUpdateModel logUpdateModel = this.prepareLogModelData(ActionType.SEARCH, UtilFunction.convertToJson(filter));
-        logService.saveLog(logUpdateModel);
+        ProductCache.putData(filter.toString(), result, TIME_EXPIRED);
         return result;
     }
 
 
     @Override
     public ProductDTO getProductDetail(Long id) {
+        String cacheKey = "product:" + id;
+        CacheModel<ProductDTO> dataCache = ProductCache.getData(cacheKey);
+        if (Objects.nonNull(dataCache)) {
+            return dataCache.getData();
+        }
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
-            LogUpdateModel logUpdateModel = this.prepareLogModelData(ActionType.SEARCH, UtilFunction.convertToJson(product.get()));
-            logService.saveLog(logUpdateModel);
-            Optional<Vendor> vendor = vendorRepository.findById(product.get().getVendorId());
             List<Image> images = imageRepository.findAllByProductId(product.get().getId());
-            return this.mappingToProduct(product.get(), vendor.get().getVendorName(), images);
+            ProductDTO result = this.mappingToProduct(product.get(), images);
+            ProductCache.putData(cacheKey, result, TIME_EXPIRED);
+            return result;
         }
         throw new CommonBusinessException("Not found Product", HttpStatus.NOT_FOUND.value());
     }
@@ -106,6 +109,11 @@ public class ProductServiceImpl implements ProductService {
         if (product.isPresent()) {
             imageRepository.deleteAllByProductId(id);
             productRepository.deleteById(id);
+            String cacheKey = "product:" + id;
+            CacheModel<ProductDTO> dataCache = ProductCache.getData(cacheKey);
+            if (Objects.nonNull(dataCache)) {
+                ProductCache.removeData(cacheKey);
+            }
         } else {
             throw new CommonBusinessException("Not found Product", HttpStatus.NOT_FOUND.value());
         }
@@ -115,15 +123,22 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void saveProduct(ProductUpdateModel product) {
         this.validation(product);
+        List<Image> listImages = new ArrayList<>();
         Product model = this.markupData(product);
         Product savedProduct = productRepository.save(model);
         if (!product.getImageUpdate().isEmpty()) {
             List<Image> list = product.getImageUpdate().stream().map(image -> image.buildModelCreate(image, savedProduct.getId())).collect(Collectors.toList());
-            imageRepository.saveAll(list);
+            listImages = imageRepository.saveAll(list);
+        }
+        String cacheKey = "product:" + savedProduct.getId();
+        CacheModel<ProductDTO> dataCache = ProductCache.getData(cacheKey);
+        if (Objects.nonNull(dataCache)) {
+            ProductDTO productData = this.mappingToProduct(savedProduct, listImages);
+            ProductCache.updateData(cacheKey, productData);
         }
     }
 
-    private ProductDTO mappingToProduct(Product product, String vendorName, List<Image> images) {
+    private ProductDTO mappingToProduct(Product product, List<Image> images) {
         List<ImageDTO> imageDTOList = images.stream().map(this::mappingToImage).collect(Collectors.toList());
         return ProductDTO.builder()
                 .id(product.getId())
@@ -143,19 +158,15 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
-    private LogUpdateModel prepareLogModelData(ActionType actionType, String content) {
-        return LogUpdateModel.builder()
-                .actionType(actionType)
-                .content(content)
-                .build();
-    }
-
     private void validation(ProductUpdateModel model) {
         if (StringUtils.isEmpty(model.getProductName())) {
             throw new CommonBusinessException("Product Name can not be empited");
         }
         if (Objects.isNull(model.getProductPrice()) || model.getProductPrice().compareTo(BigDecimal.ONE) == 0) {
             throw new CommonBusinessException("Product Price need to be higher than 0");
+        }
+        if (Objects.isNull(model.getProductQuantity()) || model.getProductQuantity() == 0) {
+            throw new CommonBusinessException("Product Quantity need to be higher than 0");
         }
         Optional<Vendor> vendor = vendorRepository.findById(model.getVendorId());
         if (vendor.isEmpty()) {
@@ -185,5 +196,4 @@ public class ProductServiceImpl implements ProductService {
                 .typeId(product.getTypeId())
                 .build();
     }
-
 }

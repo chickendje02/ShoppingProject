@@ -66,7 +66,7 @@ public class VendorServiceImpl extends CommonQueryHandler<Vendor, VendorDTO> imp
         return VendorDTO.builder()
                 .id(model.getId())
                 .vendorName(model.getVendorName())
-                .country(model.getCountry())
+                .vendorAddress(model.getVendorAddress())
                 .build();
     }
 
@@ -74,8 +74,8 @@ public class VendorServiceImpl extends CommonQueryHandler<Vendor, VendorDTO> imp
         if (StringUtils.isEmpty(model.getVendorName())) {
             throw new CommonBusinessException("Vendor name can not be emptied");
         }
-        if (StringUtils.isEmpty(model.getCountry())) {
-            throw new CommonBusinessException("Country can not be emptied");
+        if (StringUtils.isEmpty(model.getVendorAddress())) {
+            throw new CommonBusinessException("Address can not be emptied");
         }
         List<Vendor> data = vendorRepository.findAll();
         data.stream().parallel().forEach(item -> {
@@ -96,7 +96,8 @@ public class VendorServiceImpl extends CommonQueryHandler<Vendor, VendorDTO> imp
         Vendor vendor = new Vendor();
         vendor.setId(model.getVendorId());
         vendor.setVendorName(model.getVendorName());
-        vendor.setCountry(model.getCountry());
+        vendor.setVendorAddress(model.getVendorAddress());
+        vendor.setVendorPhoneNumber(model.getVendorPhoneNumber());
         return vendor;
     }
 }

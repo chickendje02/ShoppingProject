@@ -11,4 +11,11 @@ public class LogUpdateModel {
     private ActionType actionType;
 
     private String content;
+
+    public static LogUpdateModel prepareLogModelData(ActionType actionType, String content) {
+        return LogUpdateModel.builder()
+                .actionType(actionType)
+                .content(content)
+                .build();
+    }
 }

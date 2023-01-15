@@ -13,5 +13,5 @@ public class VendorDTO {
 
     private String vendorName;
 
-    private String country;
+    private String vendorAddress;
 }
