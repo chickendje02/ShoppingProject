@@ -2,8 +2,10 @@ package com.excercise.productservice.cache;
 
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class ProductCache {
@@ -57,14 +59,5 @@ public class ProductCache {
     public static Map<String, CacheModel> getCacheMap() {
         return cacheMap;
     }
-
-
-    public static void main(String[] args) {
-        long yourmilliseconds = System.currentTimeMillis() - (1000L * 60 * 10);
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
-        Date resultdate = new Date(yourmilliseconds);
-        System.out.println(sdf.format(resultdate));
-    }
-
 
 }

@@ -10,14 +10,7 @@ import com.excercise.productservice.service.ProductService;
 import com.excercise.productservice.utils.UtilFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,6 +37,16 @@ public class ProductController {
         LogUpdateModel logUpdateModel = LogUpdateModel.prepareLogModelData(ActionType.VIEW, UtilFunction.convertToJson(id));
         logService.saveLog(logUpdateModel);
         return ResponseEntity.ok(productService.getProductDetail(id));
+    }
+
+    @GetMapping("/get-product-by-type")
+    public ResponseEntity findByTypeId(@RequestParam Long typeId) {
+        return ResponseEntity.ok(productService.findByTypeId(typeId));
+    }
+
+    @GetMapping("/get-product-by-vendor")
+    public ResponseEntity findByVendorId(@RequestParam Long vendorId) {
+        return ResponseEntity.ok(productService.findByTypeId(vendorId));
     }
 
     @PostMapping

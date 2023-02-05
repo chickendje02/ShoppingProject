@@ -12,13 +12,5 @@ public class CacheModel<T> {
     private static void abc(){
 
     }
-
-    class TestObject{
-
-
-        public void test(){
-            abc();
-        }
-    }
 }
 

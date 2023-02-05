@@ -1,0 +1,30 @@
+my:
+  #  username: intern
+  #  password: intern
+  #  url: jdbc:mysql://172.21.3.49:3306/internship
+  #  username: user
+  #  password: trungnguyen
+  #  url: jdbc:mysql://localhost:3306/mydb
+  username: trungnguyen
+  password: trungnguyen
+  url: jdbc:mysql://14.225.255.99:3306/mydb
+
+spring:
+  application:
+    name: cart-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${my.username}
+    password: ${my.password}
+    url: ${my.url}
+  jpa:
+    show-sql: true
+
+eureka:
+  client:
+    serviceUrl:
+      #      defaultZone: http://172.23.20.101:8761/eureka
+      defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 8890

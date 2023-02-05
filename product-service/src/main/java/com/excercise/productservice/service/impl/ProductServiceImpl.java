@@ -77,11 +77,30 @@ public class ProductServiceImpl implements ProductService {
             products = productRepository.findAllByProductNameContains(filter.getName(), pageRequest);
         }
         products.ifPresent(productList -> productList.forEach(product -> {
-            List<Image> images = imageRepository.findAllByProductId(product.getId());
-            result.add(this.mappingToProduct(product, images));
+            result.add(this.mappingToProduct(product));
         }));
         ProductCache.putData(filter.toString(), result, TIME_EXPIRED);
         return result;
+    }
+
+    @Override
+    public ProductDTO findByTypeId(Long typeId) {
+        Optional<Product> product = productRepository.findByTypeId(typeId);
+        ProductDTO productDTO = null;
+        if (product.isPresent()) {
+            productDTO = this.mappingToProduct(product.get());
+        }
+        return productDTO;
+    }
+
+    @Override
+    public ProductDTO findByVendorId(Long vendorId) {
+        Optional<Product> product = productRepository.findByVendorId(vendorId);
+        ProductDTO productDTO = null;
+        if (product.isPresent()) {
+            productDTO = this.mappingToProduct(product.get());
+        }
+        return productDTO;
     }
 
     @Override
@@ -93,8 +112,7 @@ public class ProductServiceImpl implements ProductService {
         }
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
-            List<Image> images = imageRepository.findAllByProductId(product.get().getId());
-            ProductDTO result = this.mappingToProduct(product.get(), images);
+            ProductDTO result = this.mappingToProduct(product.get());
             ProductCache.putData(cacheKey, result, TIME_EXPIRED);
             return result;
         }
@@ -132,12 +150,13 @@ public class ProductServiceImpl implements ProductService {
         String cacheKey = "product:" + savedProduct.getId();
         CacheModel<ProductDTO> dataCache = ProductCache.getData(cacheKey);
         if (Objects.nonNull(dataCache)) {
-            ProductDTO productData = this.mappingToProduct(savedProduct, listImages);
+            ProductDTO productData = this.mappingToProduct(savedProduct);
             ProductCache.updateData(cacheKey, productData);
         }
     }
 
-    private ProductDTO mappingToProduct(Product product, List<Image> images) {
+    private ProductDTO mappingToProduct(Product product) {
+        List<Image> images = imageRepository.findAllByProductId(product.getId());
         List<ImageDTO> imageDTOList = images.stream().map(this::mappingToImage).collect(Collectors.toList());
         return ProductDTO.builder()
                 .id(product.getId())

@@ -10,6 +10,10 @@ public interface ProductService {
 
     List<ProductDTO> findAll(ProductFilter filter);
 
+    ProductDTO findByTypeId(Long typeId);
+
+    ProductDTO findByVendorId(Long vendorId);
+
     void saveProduct(ProductUpdateModel product);
 
     ProductDTO getProductDetail(Long id);
