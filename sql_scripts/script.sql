@@ -38,12 +38,12 @@ CREATE TABLE image_sherwin
 DROP TABLE IF EXISTS vendor_sherwin;
 CREATE TABLE vendor_sherwin
 (
-    id               INT(11) PRIMARY KEY AUTO_INCREMENT,
-    vendor_name      TEXT,
-    vendor_address   VARCHAR(100),
+    id                  INT(11) PRIMARY KEY AUTO_INCREMENT,
+    vendor_name         TEXT,
+    vendor_address      VARCHAR(100),
     vendor_phone_number VARCHAR(20),
-    last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
-    last_update_by   VARCHAR(50) DEFAULT ''
+    last_update_date    TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
+    last_update_by      VARCHAR(50) DEFAULT ''
 );
 
 DROP TABLE IF EXISTS customer_logging_sherwin;
@@ -71,4 +71,35 @@ CREATE TABLE country_support_sherwin
     country_code     VARCHAR(10),
     last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
     last_update_by   VARCHAR(50) DEFAULT ''
+);
+
+DROP TABLE IF EXISTS customer_sherwin;
+CREATE TABLE customer_sherwin
+(
+    id               INT(11) PRIMARY KEY AUTO_INCREMENT,
+    username         VARCHAR(50),
+    password         VARCHAR(100),
+    phone_number     VARCHAR(20),
+    last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
+    last_update_by   VARCHAR(50) DEFAULT ''
+);
+
+DROP TABLE IF EXISTS cart_sherwin;
+CREATE TABLE cart_sherwin
+(
+    id               INT(11) PRIMARY KEY AUTO_INCREMENT,
+    customer_id      INT(11),
+    last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
+    last_update_by   VARCHAR(50) DEFAULT ''
+);
+
+DROP TABLE IF EXISTS cart_product_sherwin;
+CREATE TABLE cart_product_sherwin
+(
+    cart_id          INT(11),
+    product_id       INT(11),
+    quantity         INT(11),
+    last_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
+    last_update_by   VARCHAR(50) DEFAULT '',
+    PRIMARY KEY(cart_id,product_id)
 );
