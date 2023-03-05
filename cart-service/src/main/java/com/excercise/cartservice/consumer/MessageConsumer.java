@@ -2,6 +2,7 @@ package com.excercise.cartservice.consumer;
 
 import com.excercise.cartservice.model.kafka.Customer;
 import com.excercise.cartservice.service.CartCommandService;
+import com.excercise.cartservice.utils.MessageUtils;
 import com.excercise.cartservice.utils.ObjectMapping;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,9 +21,9 @@ public class MessageConsumer {
     @Autowired
     CartCommandService cartCommandService;
 
-    @KafkaListener(topics = KAFKA_TOPIC, groupId = "group-quickstart")
+    @KafkaListener(topics = "quickstart", groupId = "group-quickstart-2")
     public void consumeSignUpCostumer(String message) {
-        Customer customer = ObjectMapping.readValue(message, Customer.class);
+        Customer customer = ObjectMapping.readValue(MessageUtils.decrypt(message), Customer.class);
         cartCommandService.addCart(customer.getId());
     }
 }
